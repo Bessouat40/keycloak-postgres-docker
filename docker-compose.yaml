@@ -1,0 +1,31 @@
+version: '4'
+services:
+  keycloakDb:
+    image: postgres
+    restart: unless-stopped
+    container_name: keycloak
+    environment:
+      - POSTGRES_USER: postgres
+      - POSTGRES_PASSWORD: postgres
+      - POSTGRES_DB: keycloak
+    ports:
+      - '5436:5432'
+    volumes:
+      - ./db:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0.5
+    environment:
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://keycloakDb:5432/keycloak
+      - KC_DB_USERNAME=postgres
+      - KC_DB_PASSWORD=postgres
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB_SCHEMA=public
+    command: start-dev
+    ports:
+      - '8080:8080'
+    depends_on:
+      - keycloakDb
