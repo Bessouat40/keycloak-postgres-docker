@@ -1,6 +1,6 @@
 # keycloak-postgres-docker
 
-It's an example project to show how to setup keycloak using a postgres database with docker.
+It's a minimalist example project to show how to setup keycloak using a postgres database with docker.
 
 ## Usage
 
